@@ -1,0 +1,29 @@
+name: Python package
+
+on: [push]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    strategy:
+      max-parallel: 4
+      matrix:
+        python-version: [3.10.5, 3.11]
+
+    steps:
+      - uses: actions/checkout@v3
+      - name: install python ${{ matrix.python-version }}
+        uses: actions/setup-python@v4
+        with:
+          python-version: ${{ matrix.python-version }}
+      - name: install poetry & tox
+        run: |
+          curl -sSL https://install.python-poetry.org | python3 -
+          python -m pip install --upgrade pip
+          pip install tox tox-gh-actions
+      - name: install nasm
+        uses: ilammy/setup-nasm@v1
+      - name: test -> tox
+        run: tox
+      - name: test -> ./test-nova.py
+        run: ./test-nova.py --run tests
