@@ -8,6 +8,7 @@ packages = [{include = "nova_grad"}]
 
 [tool.poetry.dependencies]
 python = "^3.10"
+pytest = "^7.4.0"
 
 
 [build-system]
