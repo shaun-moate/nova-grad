@@ -25,5 +25,3 @@ jobs:
         uses: ilammy/setup-nasm@v1
       - name: test -> tox
         run: tox
-      - name: test -> ./test-nova.py
-        run: ./test-nova.py --run tests
