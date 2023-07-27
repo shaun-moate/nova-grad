@@ -9,7 +9,14 @@ packages = [{include = "nova_grad"}]
 [tool.poetry.dependencies]
 python = "^3.10"
 pytest = "^7.4.0"
+numpy = "^1.25.1"
+matplotlib = "^3.7.2"
+torch = "^2.0.1"
+graphviz = "^0.20.1"
 
+
+[tool.poetry.group.dev.dependencies]
+jupyter = "^1.0.0"
 
 [build-system]
 requires = ["poetry-core"]
