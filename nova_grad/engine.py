@@ -61,11 +61,13 @@ class Scalar:
     def exp(self):
         x = self.data
         out = Scalar(math.exp(x), (self, ), "exp")
-
         def _backward():
             self.grad += math.exp(self.data) * out.grad
         out._backward = _backward
+        return out
         
+    # TODO; review options for implementations of 'squashing' - ie. ReLu... or sigmoid (linear, non-linear)
+    # TODO add options on set-up to what type of squashing function is wanted
     def tanh(self):
         x = self.data
         t = (math.exp(2*x) - 1) / (math.exp(2*x) + 1)
