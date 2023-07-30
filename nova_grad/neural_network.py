@@ -10,7 +10,7 @@ class Base:
         return []
 
 class Neuron(Base):
-    def __init__(self, n_inputs):
+    def __init__(self, n_inputs: int):
         self.weights = [Scalar(random.uniform(-1,1)) for _ in range(n_inputs)]
         self.bias = Scalar(random.uniform(-1,1))
 
@@ -18,14 +18,14 @@ class Neuron(Base):
         act = sum((wi*xi for wi,xi in zip(self.weights, x)), self.bias)
         return act.tanh()
 
-    def parameters(self):
+    def parameters(self) -> list[Scalar]:
         return self.weights + [self.bias]
 
     def __repr__(self):
-        return f"Tanh Neuron({len(self.weights)})"
+        return f"TanhNeuron({len(self.weights)})"
 
 class Layer(Base):
-    def __init__(self, n_inputs, n_outputs):
+    def __init__(self, n_inputs: int, n_outputs: int):
         self.neurons = [Neuron(n_inputs) for _ in range(n_outputs)]
 
     def __call__(self, x):
@@ -39,7 +39,7 @@ class Layer(Base):
         return f"Layer of [{', '.join(str(n) for n in self.neurons)}]"
 
 class MultiLayerPerceptron(Base):
-    def __init__(self, n_inputs, n_outputs):
+    def __init__(self, n_inputs: int, n_outputs: list):
         sz = [n_inputs] + n_outputs
         self.layers = [Layer(sz[i], sz[i+1]) for i in range(len(n_outputs))]
 
