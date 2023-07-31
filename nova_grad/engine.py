@@ -66,8 +66,14 @@ class Scalar:
         out._backward = _backward
         return out
         
-    # TODO; review options for implementations of 'squashing' - ie. ReLu... or sigmoid (linear, non-linear)
-    # TODO add options on set-up to what type of squashing function is wanted
+    # TODO; review options for implementations of 'squashing' (activation functions) - ie. ReLu... or sigmoid (linear, non-linear)
+    def relu(self):
+        out = Scalar(max(0.0, self.data), (self,), 'ReLU')
+        def _backward():
+            self.grad += (1.0 if out.data > 0 else 0.0) * out.grad
+        out._backward = _backward
+        return out
+
     def tanh(self):
         x = self.data
         t = (math.exp(2*x) - 1) / (math.exp(2*x) + 1)

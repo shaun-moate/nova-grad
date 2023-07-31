@@ -10,23 +10,24 @@ class Module:
         return []
 
 class Neuron(Module):
-    def __init__(self, n_inputs: int):
+    def __init__(self, n_inputs: int, method: str):
         self.weights = [Scalar(random.uniform(-1,1)) for _ in range(n_inputs)]
         self.bias = Scalar(random.uniform(-1,1))
+        self.method = method
 
     def __call__(self, x):
         act = sum((wi*xi for wi,xi in zip(self.weights, x)), self.bias)
-        return act.tanh()
+        return act.tanh() if self.method == 'tanh' else act.relu()
 
     def parameters(self) -> list[Scalar]:
         return self.weights + [self.bias]
 
     def __repr__(self):
-        return f"TanhNeuron({len(self.weights)})"
+        return f"Neuron({len(self.weights)})"
 
 class Layer(Module):
-    def __init__(self, n_inputs: int, n_outputs: int):
-        self.neurons = [Neuron(n_inputs) for _ in range(n_outputs)]
+    def __init__(self, n_inputs: int, n_outputs: int, method: str):
+        self.neurons = [Neuron(n_inputs, method) for _ in range(n_outputs)]
 
     def __call__(self, x):
         out = [n(x) for n in self.neurons]
@@ -39,9 +40,9 @@ class Layer(Module):
         return f"Layer of [{', '.join(str(n) for n in self.neurons)}]"
 
 class MultiLayerPerceptron(Module):
-    def __init__(self, n_inputs: int, n_outputs: list):
+    def __init__(self, n_inputs: int, n_outputs: list, method: str):
         sz = [n_inputs] + n_outputs
-        self.layers = [Layer(sz[i], sz[i+1]) for i in range(len(n_outputs))]
+        self.layers = [Layer(sz[i], sz[i+1], method) for i in range(len(n_outputs))]
 
     def __call__(self, x):
         for layer in self.layers:
