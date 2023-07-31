@@ -1,6 +1,6 @@
 import pytest
 from nova_grad.engine import Scalar
-from nova_grad.neural_network import Neuron, Layer, MultiLayerPerceptron
+from nova_grad.nn import Neuron, Layer, MultiLayerPerceptron
 
 def test_neuron_as_expected():
     n = Neuron(3)

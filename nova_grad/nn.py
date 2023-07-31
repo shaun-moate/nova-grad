@@ -1,7 +1,7 @@
 import random
 from nova_grad.engine import Scalar
 
-class Base:
+class Module:
     def zero_grad(self):
         for p in self.parameters():
             p.grad = 0
@@ -9,7 +9,7 @@ class Base:
     def parameters(self):
         return []
 
-class Neuron(Base):
+class Neuron(Module):
     def __init__(self, n_inputs: int):
         self.weights = [Scalar(random.uniform(-1,1)) for _ in range(n_inputs)]
         self.bias = Scalar(random.uniform(-1,1))
@@ -24,7 +24,7 @@ class Neuron(Base):
     def __repr__(self):
         return f"TanhNeuron({len(self.weights)})"
 
-class Layer(Base):
+class Layer(Module):
     def __init__(self, n_inputs: int, n_outputs: int):
         self.neurons = [Neuron(n_inputs) for _ in range(n_outputs)]
 
@@ -38,7 +38,7 @@ class Layer(Base):
     def __repr__(self):
         return f"Layer of [{', '.join(str(n) for n in self.neurons)}]"
 
-class MultiLayerPerceptron(Base):
+class MultiLayerPerceptron(Module):
     def __init__(self, n_inputs: int, n_outputs: list):
         sz = [n_inputs] + n_outputs
         self.layers = [Layer(sz[i], sz[i+1]) for i in range(len(n_outputs))]
