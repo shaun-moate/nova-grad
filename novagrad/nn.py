@@ -1,5 +1,4 @@
-import random
-from nova_grad.engine import Scalar
+from novagrad.tensor import Tensor
 
 class Module:
     def zero_grad(self):
@@ -11,15 +10,16 @@ class Module:
 
 class Neuron(Module):
     def __init__(self, n_inputs: int, method: str):
-        self.weights = [Scalar(random.uniform(-1,1)) for _ in range(n_inputs)]
-        self.bias = Scalar(random.uniform(-1,1))
+        import random
+        self.weights = [Tensor(random.uniform(-1,1)) for _ in range(n_inputs)]
+        self.bias = Tensor(random.uniform(-1,1))
         self.method = method
 
     def __call__(self, x):
         act = sum((wi*xi for wi,xi in zip(self.weights, x)), self.bias)
         return act.tanh() if self.method == 'tanh' else act.relu()
 
-    def parameters(self) -> list[Scalar]:
+    def parameters(self) -> list[Tensor]:
         return self.weights + [self.bias]
 
     def __repr__(self):
